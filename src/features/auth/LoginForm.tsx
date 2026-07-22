@@ -59,7 +59,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSwitchToRegister, onSwit
           <button
             type="button"
             onClick={onSwitchToForgot}
-            className="text-xs text-indigo-400 hover:text-indigo-300 font-medium transition-colors"
+            className="text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 font-medium transition-colors"
           >
             Forgot password?
           </button>
@@ -72,10 +72,10 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSwitchToRegister, onSwit
 
       <div className="relative my-4">
         <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t border-zinc-800" />
+          <div className="w-full border-t border-zinc-200 dark:border-zinc-800" />
         </div>
         <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-zinc-900 px-2 text-zinc-500 font-mono">Or continue with</span>
+          <span className="bg-white dark:bg-zinc-900 px-2 text-zinc-500 font-mono">Or continue with</span>
         </div>
       </div>
 
@@ -84,17 +84,17 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSwitchToRegister, onSwit
         variant="secondary"
         className="w-full"
         onClick={loginWithGoogle}
-        leftIcon={<Chrome className="w-4 h-4 text-emerald-400" />}
+        leftIcon={<Chrome className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />}
       >
         Sign in with Google
       </Button>
 
-      <p className="text-center text-xs text-zinc-400 pt-2">
+      <p className="text-center text-xs text-zinc-500 dark:text-zinc-400 pt-2">
         Don't have an account?{' '}
         <button
           type="button"
           onClick={onSwitchToRegister}
-          className="text-indigo-400 hover:text-indigo-300 font-semibold underline"
+          className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 font-semibold underline"
         >
           Register tenant account
         </button>

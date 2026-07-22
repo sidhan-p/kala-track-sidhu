@@ -25,7 +25,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   const [isJoinOrgOpen, setIsJoinOrgOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col lg:flex-row font-sans selection:bg-indigo-500 selection:text-white">
+    <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 flex flex-col lg:flex-row font-sans selection:bg-indigo-500 selection:text-white transition-colors duration-200">
       {/* Desktop Sidebar */}
       <Sidebar
         currentView={currentView}

@@ -64,20 +64,20 @@ export const Modal: React.FC<ModalProps> = ({
             exit={{ opacity: 0, scale: 0.95, y: 10 }}
             transition={{ duration: 0.2, ease: 'easeOut' }}
             className={cn(
-              'relative w-full bg-zinc-900 border border-zinc-800 rounded-xl shadow-2xl shadow-black/80 z-10 overflow-hidden flex flex-col my-8',
+              'relative w-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl shadow-2xl z-10 overflow-hidden flex flex-col my-8 text-zinc-900 dark:text-zinc-100',
               maxWidths[maxWidth]
             )}
           >
             {/* Header */}
             {(title || description) && (
-              <div className="p-5 border-b border-zinc-800/80 flex items-start justify-between gap-4">
+              <div className="p-5 border-b border-zinc-200 dark:border-zinc-800/80 flex items-start justify-between gap-4">
                 <div>
-                  {title && <h2 className="text-lg font-semibold text-zinc-100">{title}</h2>}
-                  {description && <p className="text-xs text-zinc-400 mt-1">{description}</p>}
+                  {title && <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">{title}</h2>}
+                  {description && <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">{description}</p>}
                 </div>
                 <button
                   onClick={onClose}
-                  className="p-1.5 text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800 rounded-lg transition-colors"
+                  className="p-1.5 text-zinc-400 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg transition-colors"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -89,7 +89,7 @@ export const Modal: React.FC<ModalProps> = ({
 
             {/* Footer */}
             {footer && (
-              <div className="p-4 bg-zinc-950/60 border-t border-zinc-800/80 flex items-center justify-end gap-3">
+              <div className="p-4 bg-zinc-50 dark:bg-zinc-950/60 border-t border-zinc-200 dark:border-zinc-800/80 flex items-center justify-end gap-3">
                 {footer}
               </div>
             )}

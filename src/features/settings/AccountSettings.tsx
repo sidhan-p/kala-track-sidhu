@@ -11,7 +11,7 @@ export const AccountSettings: React.FC = () => {
   const { addToast } = useToast();
 
   const [fullName, setFullName] = useState(user?.full_name || '');
-  const [email, setEmail] = useState(user?.email || '');
+  const [email] = useState(user?.email || '');
   const [loading, setLoading] = useState(false);
 
   const handleSave = async (e: React.FormEvent) => {
@@ -48,7 +48,7 @@ export const AccountSettings: React.FC = () => {
               value={email}
               disabled
               leftIcon={<Mail className="w-4 h-4" />}
-              hint="Email changes require re-verification"
+              hint="Email changes require re-verification via Supabase Auth"
             />
 
             <div className="pt-3 border-t border-zinc-800 flex justify-end">
@@ -66,15 +66,17 @@ export const AccountSettings: React.FC = () => {
             <ShieldAlert className="w-4 h-4" />
             <span>Danger Zone</span>
           </CardTitle>
-          <CardDescription>Irreversible actions for your account.</CardDescription>
+          <CardDescription>Account deletion & administrative controls.</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 rounded-xl bg-rose-500/5 border border-rose-500/20">
             <div>
               <p className="text-xs font-semibold text-zinc-100">Deactivate Account</p>
-              <p className="text-[11px] text-zinc-400">Permanently delete your profile and remove all permissions.</p>
+              <p className="text-[11px] text-zinc-400">
+                Account deletion is disabled in Phase 1 to prevent accidental data loss. Contact system administrator.
+              </p>
             </div>
-            <Button variant="danger" size="sm" onClick={() => alert('Account deletion request initiated')}>
+            <Button variant="outline" size="sm" disabled className="opacity-50 cursor-not-allowed">
               Delete Account
             </Button>
           </div>

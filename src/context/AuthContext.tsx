@@ -19,171 +19,139 @@ interface AuthContextType {
   isSupabaseConnected: boolean;
 }
 
-const DEFAULT_USER: UserProfile = {
-  id: 'usr_demo_101',
-  email: 'alex.smith@kalatrack.edu',
-  full_name: 'Dr. Alex Smith',
-  avatar_url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=250',
-  phone: '+1 (555) 234-5678',
-  institution: 'Apex Institute of Technology',
-  designation: 'Dean of Student Affairs',
-  bio: 'Overseeing campus cultural arts festivals and student development programs.',
-  is_email_verified: true,
-  system_role: 'college_admin',
-  created_at: new Date(Date.now() - 86400000 * 30).toISOString(),
-  updated_at: new Date().toISOString(),
-};
-
-const DEFAULT_DEVICES: UserSessionDevice[] = [
-  {
-    id: 'dev_1',
-    device_name: 'MacBook Pro 16"',
-    browser: 'Chrome 122.0',
-    ip_address: '192.168.1.45',
-    last_active: 'Just now',
-    is_current: true,
-  },
-  {
-    id: 'dev_2',
-    device_name: 'iPhone 15 Pro',
-    browser: 'Safari Mobile',
-    ip_address: '172.56.21.90',
-    last_active: '2 hours ago',
-    is_current: false,
-  },
-];
-
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<UserProfile | null>(() => {
-    const saved = localStorage.getItem('kalatrack_user');
-    return saved ? JSON.parse(saved) : DEFAULT_USER;
-  });
+  const [user, setUser] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const [devices, setDevices] = useState<UserSessionDevice[]>(DEFAULT_DEVICES);
+
+  const fetchProfile = async (userId: string, emailStr?: string) => {
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', userId)
+        .maybeSingle();
+
+      if (data) {
+        setUser(data as UserProfile);
+      } else if (emailStr) {
+        // Fallback profile object if trigger hasn't populated yet
+        const fallbackProf: UserProfile = {
+          id: userId,
+          email: emailStr,
+          full_name: emailStr.split('@')[0],
+          is_email_verified: true,
+          system_role: 'college_admin',
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        };
+        setUser(fallbackProf);
+      }
+    } catch (err) {
+      console.error('Error fetching user profile:', err);
+    }
+  };
 
   useEffect(() => {
     const initAuth = async () => {
-      if (isSupabaseConfigured) {
-        try {
-          const { data: { session } } = await supabase.auth.getSession();
-          if (session?.user) {
-            // Fetch profile
-            const { data: profile } = await supabase
-              .from('profiles')
-              .select('*')
-              .eq('id', session.user.id)
-              .single();
-
-            if (profile) {
-              setUser(profile as UserProfile);
-            }
-          }
-        } catch (err) {
-          console.warn('Supabase auth check fallback:', err);
-        }
+      if (!isSupabaseConfigured) {
+        setLoading(false);
+        return;
       }
-      setLoading(false);
+
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session?.user) {
+          await fetchProfile(session.user.id, session.user.email);
+        } else {
+          setUser(null);
+        }
+      } catch (err) {
+        console.error('Auth initialization error:', err);
+      } finally {
+        setLoading(false);
+      }
     };
 
     initAuth();
-  }, []);
 
-  useEffect(() => {
-    if (user) {
-      localStorage.setItem('kalatrack_user', JSON.stringify(user));
-    } else {
-      localStorage.removeItem('kalatrack_user');
+    if (isSupabaseConfigured) {
+      const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+        if (session?.user) {
+          await fetchProfile(session.user.id, session.user.email);
+        } else {
+          setUser(null);
+        }
+        setLoading(false);
+      });
+
+      return () => {
+        subscription.unsubscribe();
+      };
     }
-  }, [user]);
+  }, []);
 
   const login = async (email: string, pass: string) => {
     setLoading(true);
-    if (isSupabaseConfigured) {
-      const { data, error } = await supabase.auth.signInWithPassword({ email, password: pass });
-      if (error) {
-        setLoading(false);
-        return { success: false, error: error.message };
-      }
-      if (data.user) {
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('*')
-          .eq('id', data.user.id)
-          .single();
-
-        if (profile) {
-          setUser(profile as UserProfile);
-        } else {
-          const newProf: UserProfile = {
-            id: data.user.id,
-            email: data.user.email || email,
-            full_name: email.split('@')[0],
-            is_email_verified: Boolean(data.user.email_confirmed_at),
-            system_role: 'college_admin',
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
-          };
-          setUser(newProf);
-        }
-      }
+    if (!isSupabaseConfigured) {
       setLoading(false);
-      return { success: true };
+      return { success: false, error: 'Supabase is not configured in environment.' };
     }
 
-    // Local simulated login
-    await new Promise((r) => setTimeout(r, 600));
-    const newUser: UserProfile = {
-      ...DEFAULT_USER,
-      email,
-      full_name: email.split('@')[0].replace('.', ' ').toUpperCase(),
-    };
-    setUser(newUser);
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: email.trim(),
+      password: pass,
+    });
+
+    if (error) {
+      setLoading(false);
+      return { success: false, error: error.message };
+    }
+
+    if (data.user) {
+      await fetchProfile(data.user.id, data.user.email);
+    }
+
     setLoading(false);
     return { success: true };
   };
 
   const register = async (email: string, pass: string, fullName: string, role: AppRole = 'college_admin') => {
     setLoading(true);
-    if (isSupabaseConfigured) {
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password: pass,
-        options: { data: { full_name: fullName, system_role: role } },
-      });
-      if (error) {
-        setLoading(false);
-        return { success: false, error: error.message };
-      }
-      if (data.user) {
-        const newProf: UserProfile = {
-          id: data.user.id,
-          email,
-          full_name: fullName,
-          is_email_verified: false,
-          system_role: role,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
-        };
-        setUser(newProf);
-      }
+    if (!isSupabaseConfigured) {
       setLoading(false);
-      return { success: true };
+      return { success: false, error: 'Supabase is not configured in environment.' };
     }
 
-    // Simulated registration
-    await new Promise((r) => setTimeout(r, 700));
-    const newUser: UserProfile = {
-      id: 'usr_' + Math.random().toString(36).substr(2, 8),
-      email,
-      full_name: fullName,
-      is_email_verified: false,
-      system_role: role,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    };
-    setUser(newUser);
+    const { data, error } = await supabase.auth.signUp({
+      email: email.trim(),
+      password: pass,
+      options: {
+        data: {
+          full_name: fullName.trim(),
+          role: role,
+        },
+      },
+    });
+
+    if (error) {
+      setLoading(false);
+      return { success: false, error: error.message };
+    }
+
+    if (data.user) {
+      // Upsert profile manually to guarantee existence
+      await supabase.from('profiles').upsert({
+        id: data.user.id,
+        email: email.trim(),
+        full_name: fullName.trim(),
+        system_role: role,
+        updated_at: new Date().toISOString(),
+      });
+      await fetchProfile(data.user.id, email.trim());
+    }
+
     setLoading(false);
     return { success: true };
   };
@@ -198,41 +166,39 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const forgotPassword = async (email: string) => {
-    if (isSupabaseConfigured) {
-      const { error } = await supabase.auth.resetPasswordForEmail(email);
-      if (error) return { success: false, error: error.message };
+    if (!isSupabaseConfigured) {
+      return { success: false, error: 'Supabase is not configured.' };
     }
-    await new Promise((r) => setTimeout(r, 500));
+    const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
+      redirectTo: `${window.location.origin}/reset-password`,
+    });
+    if (error) return { success: false, error: error.message };
     return { success: true };
   };
 
   const resetPassword = async (newPass: string) => {
-    if (isSupabaseConfigured) {
-      const { error } = await supabase.auth.updateUser({ password: newPass });
-      if (error) return { success: false, error: error.message };
+    if (!isSupabaseConfigured) {
+      return { success: false, error: 'Supabase is not configured.' };
     }
-    await new Promise((r) => setTimeout(r, 500));
+    const { error } = await supabase.auth.updateUser({ password: newPass });
+    if (error) return { success: false, error: error.message };
     return { success: true };
   };
 
   const loginWithGoogle = async () => {
-    if (isSupabaseConfigured) {
-      await supabase.auth.signInWithOAuth({ provider: 'google' });
-      return;
-    }
-    setLoading(true);
-    await new Promise((r) => setTimeout(r, 600));
-    setUser({
-      ...DEFAULT_USER,
-      full_name: 'Google Auth User',
-      email: 'user.google@kalatrack.edu',
+    if (!isSupabaseConfigured) return;
+    await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: window.location.origin,
+      },
     });
-    setLoading(false);
   };
 
   const updateProfile = async (updates: Partial<UserProfile>) => {
     if (!user) return { success: false, error: 'No authenticated user' };
     const updated = { ...user, ...updates, updated_at: new Date().toISOString() };
+
     if (isSupabaseConfigured) {
       const { error } = await supabase
         .from('profiles')
@@ -240,6 +206,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         .eq('id', user.id);
       if (error) return { success: false, error: error.message };
     }
+
     setUser(updated);
     return { success: true };
   };
@@ -249,13 +216,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setUser({ ...user, is_email_verified: true });
   };
 
-  const switchRole = (newRole: AppRole) => {
-    if (!user) return;
-    setUser({ ...user, system_role: newRole });
+  const switchRole = (_newRole: AppRole) => {
+    // Role switching is disabled in production to enforce real DB permissions
+    console.warn('Role switching is disabled. Roles are enforced from database organization memberships.');
   };
 
-  const revokeDevice = (id: string) => {
-    setDevices((prev) => prev.filter((d) => d.id !== id));
+  const revokeDevice = (_id: string) => {
+    // Session device management coming later
   };
 
   return (
@@ -272,7 +239,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         updateProfile,
         verifyEmail,
         switchRole,
-        devices,
+        devices: [],
         revokeDevice,
         isSupabaseConnected: isSupabaseConfigured,
       }}

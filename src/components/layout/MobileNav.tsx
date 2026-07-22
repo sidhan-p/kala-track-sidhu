@@ -63,29 +63,29 @@ export const MobileNav: React.FC<MobileNavProps> = ({ isOpen, onClose, currentVi
               animate={{ x: 0 }}
               exit={{ x: '-100%' }}
               transition={{ duration: 0.25, ease: 'easeOut' }}
-              className="relative w-80 max-w-[85vw] h-full bg-zinc-950 border-r border-zinc-800 p-5 flex flex-col justify-between overflow-y-auto"
+              className="relative w-80 max-w-[85vw] h-full bg-white dark:bg-zinc-950 border-r border-zinc-200 dark:border-zinc-800 p-5 flex flex-col justify-between overflow-y-auto text-zinc-900 dark:text-zinc-100"
             >
               <div>
-                <div className="flex items-center justify-between pb-4 border-b border-zinc-800">
+                <div className="flex items-center justify-between pb-4 border-b border-zinc-200 dark:border-zinc-800">
                   <div className="flex items-center gap-2.5">
                     <div className="w-8 h-8 rounded-xl bg-indigo-600 flex items-center justify-center font-bold text-white text-base">
                       K
                     </div>
                     <div>
-                      <span className="font-bold text-sm text-zinc-100">KalaTrack</span>
+                      <span className="font-bold text-sm text-zinc-900 dark:text-zinc-100">KalaTrack</span>
                       <p className="text-[10px] text-zinc-500">Educational Event OS</p>
                     </div>
                   </div>
-                  <button onClick={onClose} className="p-1.5 text-zinc-400 hover:text-zinc-100">
+                  <button onClick={onClose} className="p-1.5 text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100">
                     <X className="w-5 h-5" />
                   </button>
                 </div>
 
                 {currentOrg && (
-                  <div className="mt-4 p-3 rounded-xl bg-zinc-900 border border-zinc-800 flex items-center gap-3">
-                    <Building2 className="w-4 h-4 text-indigo-400 shrink-0" />
+                  <div className="mt-4 p-3 rounded-xl bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 flex items-center gap-3">
+                    <Building2 className="w-4 h-4 text-indigo-600 dark:text-indigo-400 shrink-0" />
                     <div className="overflow-hidden">
-                      <p className="text-xs font-semibold text-zinc-200 truncate">{currentOrg.name}</p>
+                      <p className="text-xs font-semibold text-zinc-800 dark:text-zinc-200 truncate">{currentOrg.name}</p>
                       <p className="text-[10px] text-zinc-500">{currentOrg.slug}</p>
                     </div>
                   </div>
@@ -105,7 +105,7 @@ export const MobileNav: React.FC<MobileNavProps> = ({ isOpen, onClose, currentVi
                         className={`w-full flex items-center gap-3 px-3.5 py-3 rounded-xl text-xs font-semibold transition-all ${
                           isActive
                             ? 'bg-indigo-600 text-white font-bold'
-                            : 'text-zinc-400 hover:bg-zinc-900 hover:text-zinc-100'
+                            : 'text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-900 hover:text-zinc-900 dark:hover:text-zinc-100'
                         }`}
                       >
                         <Icon className="w-4 h-4" />
@@ -116,8 +116,8 @@ export const MobileNav: React.FC<MobileNavProps> = ({ isOpen, onClose, currentVi
                 </div>
 
                 {/* Role Switcher */}
-                <div className="mt-6 pt-4 border-t border-zinc-800">
-                  <p className="text-[10px] font-bold text-zinc-500 uppercase mb-2">Test Role Matrix</p>
+                <div className="mt-6 pt-4 border-t border-zinc-200 dark:border-zinc-800">
+                  <p className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase mb-2">Test Role Matrix</p>
                   <div className="grid grid-cols-2 gap-1.5">
                     {rolesList.map((r) => (
                       <button
@@ -128,8 +128,8 @@ export const MobileNav: React.FC<MobileNavProps> = ({ isOpen, onClose, currentVi
                         }}
                         className={`px-2 py-1.5 rounded text-[11px] font-medium text-left truncate ${
                           user?.system_role === r
-                            ? 'bg-indigo-600/30 text-indigo-300 font-bold border border-indigo-500/40'
-                            : 'bg-zinc-900 text-zinc-400 hover:text-zinc-200'
+                            ? 'bg-indigo-50 dark:bg-indigo-600/30 text-indigo-700 dark:text-indigo-300 font-bold border border-indigo-200 dark:border-indigo-500/40'
+                            : 'bg-zinc-100 dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200'
                         }`}
                       >
                         {ROLE_LABELS[r].title}
@@ -139,10 +139,10 @@ export const MobileNav: React.FC<MobileNavProps> = ({ isOpen, onClose, currentVi
                 </div>
               </div>
 
-              <div className="pt-4 border-t border-zinc-800">
+              <div className="pt-4 border-t border-zinc-200 dark:border-zinc-800">
                 <button
                   onClick={logout}
-                  className="w-full flex items-center gap-2 px-3 py-2 text-xs font-medium text-rose-400 hover:bg-rose-500/10 rounded-lg"
+                  className="w-full flex items-center gap-2 px-3 py-2 text-xs font-medium text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-500/10 rounded-lg"
                 >
                   <LogOut className="w-4 h-4" />
                   <span>Log Out</span>
@@ -154,7 +154,7 @@ export const MobileNav: React.FC<MobileNavProps> = ({ isOpen, onClose, currentVi
       </AnimatePresence>
 
       {/* Bottom Bar for Mobile */}
-      <div className="fixed bottom-0 left-0 right-0 z-30 lg:hidden bg-zinc-950/95 border-t border-zinc-800/80 px-4 py-2 flex items-center justify-around backdrop-blur-xl">
+      <div className="fixed bottom-0 left-0 right-0 z-30 lg:hidden bg-white/95 dark:bg-zinc-950/95 border-t border-zinc-200 dark:border-zinc-800/80 px-4 py-2 flex items-center justify-around backdrop-blur-xl">
         {navItems.slice(0, 4).map((item) => {
           const Icon = item.icon;
           const isActive = currentView === item.id;
@@ -163,7 +163,7 @@ export const MobileNav: React.FC<MobileNavProps> = ({ isOpen, onClose, currentVi
               key={item.id}
               onClick={() => onNavigate(item.id)}
               className={`flex flex-col items-center gap-1 p-1 text-[10px] font-medium transition-colors ${
-                isActive ? 'text-indigo-400 font-bold' : 'text-zinc-500 hover:text-zinc-300'
+                isActive ? 'text-indigo-600 dark:text-indigo-400 font-bold' : 'text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-300'
               }`}
             >
               <Icon className="w-4 h-4" />

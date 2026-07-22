@@ -45,7 +45,7 @@ export const JoinOrgModal: React.FC<JoinOrgModalProps> = ({ isOpen, onClose }) =
       <form onSubmit={handleSubmit} className="space-y-4">
         <Input
           label="Invitation Join Code"
-          placeholder="e.g. APEX99"
+          placeholder="e.g. 6-character code"
           value={joinCode}
           onChange={(e) => setJoinCode(e.target.value.toUpperCase())}
           leftIcon={<KeyRound className="w-4 h-4" />}
@@ -55,7 +55,7 @@ export const JoinOrgModal: React.FC<JoinOrgModalProps> = ({ isOpen, onClose }) =
         />
 
         <p className="text-[11px] text-zinc-400 leading-relaxed">
-          Sample demo join codes: <strong className="text-indigo-400 font-mono">APEX99</strong> or <strong className="text-indigo-400 font-mono">MARY77</strong>.
+          Join codes are issued by your organization administrator in the Organization Access Settings.
         </p>
 
         <div className="pt-3 border-t border-zinc-800 flex items-center justify-end gap-3">
@@ -63,7 +63,7 @@ export const JoinOrgModal: React.FC<JoinOrgModalProps> = ({ isOpen, onClose }) =
             Cancel
           </Button>
           <Button type="submit" variant="primary" isLoading={loading}>
-            Join Tenant
+            Join Organization
           </Button>
         </div>
       </form>

@@ -57,10 +57,10 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose,
           initial={{ opacity: 0, scale: 0.95, y: -10 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: -10 }}
-          className="relative w-full max-w-xl bg-zinc-900 border border-zinc-800 rounded-xl shadow-2xl overflow-hidden z-10"
+          className="relative w-full max-w-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl shadow-2xl overflow-hidden z-10 text-zinc-900 dark:text-zinc-100"
         >
           {/* Search Input */}
-          <div className="flex items-center px-4 py-3.5 border-b border-zinc-800 gap-3 bg-zinc-950/60">
+          <div className="flex items-center px-4 py-3.5 border-b border-zinc-200 dark:border-zinc-800 gap-3 bg-zinc-50 dark:bg-zinc-950/60">
             <Search className="w-4 h-4 text-zinc-400 shrink-0" />
             <input
               type="text"
@@ -68,9 +68,9 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose,
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               autoFocus
-              className="w-full bg-transparent text-sm text-zinc-100 placeholder-zinc-500 focus:outline-none"
+              className="w-full bg-transparent text-sm text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none"
             />
-            <kbd className="hidden sm:inline-flex items-center gap-0.5 text-[10px] bg-zinc-800 text-zinc-400 px-2 py-0.5 rounded border border-zinc-700">
+            <kbd className="hidden sm:inline-flex items-center gap-0.5 text-[10px] bg-zinc-200 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 px-2 py-0.5 rounded border border-zinc-300 dark:border-zinc-700">
               ESC
             </kbd>
           </div>
@@ -79,7 +79,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose,
           <div className="p-3 max-h-96 overflow-y-auto space-y-4">
             {/* Navigation Section */}
             <div>
-              <p className="text-[10px] font-bold text-zinc-500 uppercase px-2 mb-1.5 tracking-wider">
+              <p className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase px-2 mb-1.5 tracking-wider">
                 Quick Navigation
               </p>
               <div className="space-y-1">
@@ -88,46 +88,46 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose,
                     onNavigate('dashboard');
                     onClose();
                   }}
-                  className="w-full flex items-center justify-between px-3 py-2 text-xs font-medium text-zinc-200 hover:bg-zinc-800 rounded-lg transition-colors"
+                  className="w-full flex items-center justify-between px-3 py-2 text-xs font-medium text-zinc-700 dark:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg transition-colors"
                 >
                   <div className="flex items-center gap-2.5">
-                    <Sparkles className="w-4 h-4 text-indigo-400" />
+                    <Sparkles className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
                     <span>Dashboard Overview</span>
                   </div>
-                  <span className="text-[10px] text-zinc-500">Go to home</span>
+                  <span className="text-[10px] text-zinc-400 dark:text-zinc-500">Go to home</span>
                 </button>
                 <button
                   onClick={() => {
                     onNavigate('organization');
                     onClose();
                   }}
-                  className="w-full flex items-center justify-between px-3 py-2 text-xs font-medium text-zinc-200 hover:bg-zinc-800 rounded-lg transition-colors"
+                  className="w-full flex items-center justify-between px-3 py-2 text-xs font-medium text-zinc-700 dark:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg transition-colors"
                 >
                   <div className="flex items-center gap-2.5">
-                    <Building className="w-4 h-4 text-emerald-400" />
+                    <Building className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                     <span>Organization & Members</span>
                   </div>
-                  <span className="text-[10px] text-zinc-500">Manage tenant</span>
+                  <span className="text-[10px] text-zinc-400 dark:text-zinc-500">Manage tenant</span>
                 </button>
                 <button
                   onClick={() => {
                     onNavigate('settings');
                     onClose();
                   }}
-                  className="w-full flex items-center justify-between px-3 py-2 text-xs font-medium text-zinc-200 hover:bg-zinc-800 rounded-lg transition-colors"
+                  className="w-full flex items-center justify-between px-3 py-2 text-xs font-medium text-zinc-700 dark:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg transition-colors"
                 >
                   <div className="flex items-center gap-2.5">
-                    <Settings className="w-4 h-4 text-amber-400" />
+                    <Settings className="w-4 h-4 text-amber-600 dark:text-amber-400" />
                     <span>Platform Settings</span>
                   </div>
-                  <span className="text-[10px] text-zinc-500">Security & Theme</span>
+                  <span className="text-[10px] text-zinc-400 dark:text-zinc-500">Security & Theme</span>
                 </button>
               </div>
             </div>
 
             {/* Role Simulation Switcher */}
             <div>
-              <p className="text-[10px] font-bold text-zinc-500 uppercase px-2 mb-1.5 tracking-wider">
+              <p className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase px-2 mb-1.5 tracking-wider">
                 Role Testing Switcher (Current: {ROLE_LABELS[user?.system_role || 'visitor']?.title})
               </p>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5">
@@ -140,8 +140,8 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose,
                     }}
                     className={`flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-xs font-medium text-left border transition-all ${
                       user?.system_role === r
-                        ? 'bg-indigo-600/20 text-indigo-300 border-indigo-500/50'
-                        : 'bg-zinc-950/40 text-zinc-400 border-zinc-800 hover:bg-zinc-800 hover:text-zinc-200'
+                        ? 'bg-indigo-50 dark:bg-indigo-600/20 text-indigo-700 dark:text-indigo-300 border-indigo-200 dark:border-indigo-500/50'
+                        : 'bg-zinc-50 dark:bg-zinc-950/40 text-zinc-700 dark:text-zinc-400 border-zinc-200 dark:border-zinc-800 hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:text-zinc-900 dark:hover:text-zinc-200'
                     }`}
                   >
                     <Shield className="w-3.5 h-3.5 shrink-0" />
@@ -153,7 +153,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose,
 
             {/* Organizations Switcher */}
             <div>
-              <p className="text-[10px] font-bold text-zinc-500 uppercase px-2 mb-1.5 tracking-wider">
+              <p className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase px-2 mb-1.5 tracking-wider">
                 Active Organization
               </p>
               <div className="space-y-1">
@@ -166,8 +166,8 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose,
                     }}
                     className={`w-full flex items-center justify-between px-3 py-2 text-xs font-medium rounded-lg border transition-colors ${
                       currentOrg?.id === org.id
-                        ? 'bg-zinc-800/80 text-zinc-100 border-zinc-700'
-                        : 'bg-transparent text-zinc-400 border-transparent hover:bg-zinc-800/40'
+                        ? 'bg-zinc-100 dark:bg-zinc-800/80 text-zinc-900 dark:text-zinc-100 border-zinc-300 dark:border-zinc-700'
+                        : 'bg-transparent text-zinc-600 dark:text-zinc-400 border-transparent hover:bg-zinc-100 dark:hover:bg-zinc-800/40'
                     }`}
                   >
                     <div className="flex items-center gap-2">
@@ -175,7 +175,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose,
                       <span>{org.name}</span>
                     </div>
                     {currentOrg?.id === org.id && (
-                      <span className="text-[10px] text-emerald-400 font-bold uppercase">Active</span>
+                      <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold uppercase">Active</span>
                     )}
                   </button>
                 ))}
@@ -184,14 +184,14 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose,
           </div>
 
           {/* Footer */}
-          <div className="p-3 bg-zinc-950/80 border-t border-zinc-800/80 flex items-center justify-between text-[11px] text-zinc-500">
+          <div className="p-3 bg-zinc-50 dark:bg-zinc-950/80 border-t border-zinc-200 dark:border-zinc-800/80 flex items-center justify-between text-[11px] text-zinc-500">
             <span>KalaTrack Phase 1 — Foundation OS</span>
             <button
               onClick={() => {
                 logout();
                 onClose();
               }}
-              className="flex items-center gap-1.5 text-rose-400 hover:text-rose-300 font-medium"
+              className="flex items-center gap-1.5 text-rose-600 dark:text-rose-400 hover:text-rose-700 dark:hover:text-rose-300 font-medium"
             >
               <LogOut className="w-3.5 h-3.5" />
               <span>Log out</span>

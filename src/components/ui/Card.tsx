@@ -5,7 +5,7 @@ export const Card: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ className
   return (
     <div
       className={cn(
-        'bg-zinc-900/80 border border-zinc-800/80 rounded-xl p-5 shadow-lg shadow-black/20 backdrop-blur-sm transition-all duration-200',
+        'bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm dark:shadow-lg dark:shadow-black/20 backdrop-blur-sm transition-colors duration-200 text-zinc-900 dark:text-zinc-100',
         className
       )}
       {...props}
@@ -20,11 +20,11 @@ export const CardHeader: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ cla
 };
 
 export const CardTitle: React.FC<React.HTMLAttributes<HTMLHeadingElement>> = ({ className, children, ...props }) => {
-  return <h3 className={cn('text-base font-semibold text-zinc-100 tracking-tight', className)} {...props}>{children}</h3>;
+  return <h3 className={cn('text-base font-semibold text-zinc-900 dark:text-zinc-100 tracking-tight', className)} {...props}>{children}</h3>;
 };
 
 export const CardDescription: React.FC<React.HTMLAttributes<HTMLParagraphElement>> = ({ className, children, ...props }) => {
-  return <p className={cn('text-xs text-zinc-400 leading-relaxed', className)} {...props}>{children}</p>;
+  return <p className={cn('text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed', className)} {...props}>{children}</p>;
 };
 
 export const CardContent: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ className, children, ...props }) => {
@@ -32,5 +32,5 @@ export const CardContent: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ cl
 };
 
 export const CardFooter: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ className, children, ...props }) => {
-  return <div className={cn('mt-5 pt-4 border-t border-zinc-800/60 flex items-center justify-between', className)} {...props}>{children}</div>;
+  return <div className={cn('mt-5 pt-4 border-t border-zinc-200 dark:border-zinc-800/60 flex items-center justify-between', className)} {...props}>{children}</div>;
 };
